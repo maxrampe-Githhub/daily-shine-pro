@@ -6,12 +6,14 @@ const bookingInput = z.object({
   name: z.string().trim().min(1).max(120),
   email: z.string().trim().email().max(255),
   phone: z.string().trim().min(7).max(30),
-  service_type: z.enum(["Interior Detail", "Exterior Detail", "Full Detail"]),
-  preferred_date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
-  preferred_time: z.string().min(1).max(40),
-  vehicle_make: z.string().trim().min(1).max(60),
-  vehicle_model: z.string().trim().min(1).max(60),
-  vehicle_year: z.string().trim().regex(/^\d{4}$/),
+  vehicle_type: z.enum(["Sedan", "SUV", "Truck", "Coupe", "Minivan", "Other"]),
+  service_type: z.enum([
+    "Interior Detail",
+    "Exterior Detail",
+    "Full Detail",
+    "Maintenance Wash",
+    "Not Sure / Other",
+  ]),
   notes: z.string().trim().max(1000).optional().default(""),
 });
 
@@ -25,14 +27,13 @@ async function sendNotificationEmail(booking: z.infer<typeof bookingInput>, id: 
     return;
   }
   const html = `
-    <h2>New Booking Request</h2>
+    <h2>New Quote Request</h2>
     <p><strong>Customer:</strong> ${booking.name}</p>
     <p><strong>Email:</strong> ${booking.email}</p>
     <p><strong>Phone:</strong> ${booking.phone}</p>
-    <p><strong>Service:</strong> ${booking.service_type}</p>
-    <p><strong>Preferred date/time:</strong> ${booking.preferred_date} @ ${booking.preferred_time}</p>
-    <p><strong>Vehicle:</strong> ${booking.vehicle_year} ${booking.vehicle_make} ${booking.vehicle_model}</p>
-    ${booking.notes ? `<p><strong>Notes:</strong> ${booking.notes}</p>` : ""}
+    <p><strong>Vehicle Type:</strong> ${booking.vehicle_type}</p>
+    <p><strong>Service Needed:</strong> ${booking.service_type}</p>
+    ${booking.notes ? `<p><strong>Additional Details:</strong> ${booking.notes}</p>` : ""}
     <p style="color:#888;font-size:12px;">Booking ID: ${id}</p>
   `;
   try {
