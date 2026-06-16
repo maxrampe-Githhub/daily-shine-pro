@@ -62,13 +62,12 @@ async function sendNotificationEmail(booking: z.infer<typeof bookingInput>, id: 
 }
 
 export const createBooking = createServerFn({ method: "POST" })
-  .middleware([requireSupabaseAuth])
   .inputValidator((d: unknown) => bookingInput.parse(d))
-  .handler(async ({ data, context }) => {
-    const { supabase, userId } = context;
-    const { data: row, error } = await supabase
+  .handler(async ({ data }) => {
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { data: row, error } = await supabaseAdmin
       .from("bookings")
-      .insert({ ...data, user_id: userId })
+      .insert({ ...data, user_id: null })
       .select("id")
       .single();
     if (error) throw new Error(error.message);
