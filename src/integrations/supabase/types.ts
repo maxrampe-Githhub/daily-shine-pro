@@ -22,14 +22,15 @@ export type Database = {
           name: string
           notes: string | null
           phone: string
-          preferred_date: string
-          preferred_time: string
+          preferred_date: string | null
+          preferred_time: string | null
           service_type: string
           status: string
           user_id: string | null
-          vehicle_make: string
-          vehicle_model: string
-          vehicle_year: string
+          vehicle_make: string | null
+          vehicle_model: string | null
+          vehicle_type: string | null
+          vehicle_year: string | null
         }
         Insert: {
           created_at?: string
@@ -38,14 +39,15 @@ export type Database = {
           name: string
           notes?: string | null
           phone: string
-          preferred_date: string
-          preferred_time: string
+          preferred_date?: string | null
+          preferred_time?: string | null
           service_type: string
           status?: string
           user_id?: string | null
-          vehicle_make: string
-          vehicle_model: string
-          vehicle_year: string
+          vehicle_make?: string | null
+          vehicle_model?: string | null
+          vehicle_type?: string | null
+          vehicle_year?: string | null
         }
         Update: {
           created_at?: string
@@ -54,14 +56,15 @@ export type Database = {
           name?: string
           notes?: string | null
           phone?: string
-          preferred_date?: string
-          preferred_time?: string
+          preferred_date?: string | null
+          preferred_time?: string | null
           service_type?: string
           status?: string
           user_id?: string | null
-          vehicle_make?: string
-          vehicle_model?: string
-          vehicle_year?: string
+          vehicle_make?: string | null
+          vehicle_model?: string | null
+          vehicle_type?: string | null
+          vehicle_year?: string | null
         }
         Relationships: []
       }
