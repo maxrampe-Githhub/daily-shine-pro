@@ -27,14 +27,13 @@ async function sendNotificationEmail(booking: z.infer<typeof bookingInput>, id: 
     return;
   }
   const html = `
-    <h2>New Booking Request</h2>
+    <h2>New Quote Request</h2>
     <p><strong>Customer:</strong> ${booking.name}</p>
     <p><strong>Email:</strong> ${booking.email}</p>
     <p><strong>Phone:</strong> ${booking.phone}</p>
-    <p><strong>Service:</strong> ${booking.service_type}</p>
-    <p><strong>Preferred date/time:</strong> ${booking.preferred_date} @ ${booking.preferred_time}</p>
-    <p><strong>Vehicle:</strong> ${booking.vehicle_year} ${booking.vehicle_make} ${booking.vehicle_model}</p>
-    ${booking.notes ? `<p><strong>Notes:</strong> ${booking.notes}</p>` : ""}
+    <p><strong>Vehicle Type:</strong> ${booking.vehicle_type}</p>
+    <p><strong>Service Needed:</strong> ${booking.service_type}</p>
+    ${booking.notes ? `<p><strong>Additional Details:</strong> ${booking.notes}</p>` : ""}
     <p style="color:#888;font-size:12px;">Booking ID: ${id}</p>
   `;
   try {
