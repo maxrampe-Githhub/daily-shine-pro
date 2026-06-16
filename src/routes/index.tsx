@@ -108,15 +108,36 @@ function SectionHeading({ eyebrow, title }: { eyebrow: string; title: string }) 
 
 function BookSection({ user }: { user: User | null }) {
   return (
-    <section id="book" className="relative border-t border-border bg-primary px-5 py-24 text-primary-foreground">
-      <Sparkles className="absolute right-[10%] top-12 size-12 opacity-20" />
-      <div className="mx-auto max-w-3xl">
-        <div className="text-center">
-          <p className="font-mono text-[10px] uppercase tracking-[0.3em]">Ready to transform your vehicle?</p>
-          <h2 className="mt-5 text-4xl font-extrabold tracking-tight sm:text-6xl">Book Your Detail</h2>
-          <p className="mx-auto mt-5 max-w-xl opacity-80">Pick a service, tell us about your vehicle, and we'll confirm your appointment by phone or email.</p>
+    <section id="book" className="border-t border-border bg-background px-5 py-24 lg:py-32">
+      <div className="mx-auto grid max-w-6xl gap-12 lg:grid-cols-[1fr_1.1fr] lg:gap-16">
+        <div>
+          <p className="font-mono text-[10px] uppercase tracking-[0.3em] text-primary">Get in touch</p>
+          <h2 className="mt-5 text-5xl font-extrabold tracking-[-0.035em] sm:text-6xl">Get a Quote</h2>
+          <p className="mt-5 max-w-md text-base leading-7 text-muted-foreground">
+            Fill out the form or give us a call. We'll get back to you with a quote as soon as possible.
+          </p>
+
+          <div className="mt-10 border border-border bg-card p-7">
+            <p className="font-mono text-[10px] uppercase tracking-[0.24em] text-muted-foreground">Contact Info</p>
+            <ul className="mt-6 space-y-5">
+              <ContactRow icon={<Phone className="size-4" />} label="Phone" value="(616) 280-1218" href="tel:6162801218" />
+              <ContactRow icon={<Instagram className="size-4" />} label="Instagram" value="@daily_detailers_" href="https://instagram.com/daily_detailers_" />
+              <ContactRow icon={<MapPin className="size-4" />} label="Service Area" value="Grand Rapids, MI" />
+            </ul>
+          </div>
+
+          <div className="mt-6 border border-border bg-card p-7">
+            <p className="font-mono text-[10px] uppercase tracking-[0.24em] text-muted-foreground">Quick Call</p>
+            <p className="mt-4 text-sm leading-6 text-muted-foreground">
+              Prefer to talk? Give us a call and we'll give you a quote right over the phone.
+            </p>
+            <Button asChild variant="luxuryOutline" className="mt-5 w-full justify-center">
+              <a href="tel:6162801218"><Phone className="size-4" /> Call (616) 280-1218</a>
+            </Button>
+          </div>
         </div>
-        <div className="mt-12 bg-background p-8 text-foreground lg:p-12">
+
+        <div>
           {user ? <BookingForm /> : <SignInPrompt />}
         </div>
       </div>
@@ -124,92 +145,145 @@ function BookSection({ user }: { user: User | null }) {
   );
 }
 
+function ContactRow({ icon, label, value, href }: { icon: React.ReactNode; label: string; value: string; href?: string }) {
+  const content = (
+    <div className="flex items-center gap-4">
+      <span className="grid size-9 shrink-0 place-items-center border border-border text-primary">{icon}</span>
+      <span className="min-w-0">
+        <span className="block font-mono text-[9px] uppercase tracking-[0.24em] text-muted-foreground">{label}</span>
+        <span className="mt-1 block truncate font-semibold">{value}</span>
+      </span>
+    </div>
+  );
+  return <li>{href ? <a href={href} className="hover:text-primary">{content}</a> : content}</li>;
+}
+
 function SignInPrompt() {
   return (
-    <div className="text-center">
-      <h3 className="text-2xl font-bold">Sign in to book</h3>
-      <p className="mx-auto mt-3 max-w-md text-sm text-muted-foreground">Create a free account so we can keep track of your bookings and reach you when your appointment is confirmed.</p>
+    <div className="border border-border bg-card p-8 text-center lg:p-12">
+      <h3 className="text-2xl font-bold">Sign in to request a quote</h3>
+      <p className="mx-auto mt-3 max-w-md text-sm text-muted-foreground">
+        Create a free account so we can keep track of your requests and reach you when we have a quote.
+      </p>
       <div className="mt-6 flex flex-wrap justify-center gap-3">
-        <Button asChild variant="luxury" size="luxury"><Link to="/auth">Sign in to book <ArrowRight /></Link></Button>
+        <Button asChild variant="luxury" size="luxury"><Link to="/auth">Sign in <ArrowRight /></Link></Button>
         <Button asChild variant="luxuryOutline" size="luxury"><a href="tel:6162801218"><Phone /> Call us instead</a></Button>
       </div>
     </div>
   );
 }
 
-const SERVICES = ["Interior Detail", "Exterior Detail", "Full Detail"] as const;
-const TIMES = ["Morning (8a–12p)", "Afternoon (12p–4p)", "Evening (4p–7p)"];
+const VEHICLE_TYPES = ["Sedan", "SUV", "Truck", "Coupe", "Minivan", "Other"] as const;
+const SERVICES = [
+  "Interior Detail",
+  "Exterior Detail",
+  "Full Detail",
+  "Maintenance Wash",
+  "Not Sure / Other",
+] as const;
 
 function BookingForm() {
-  const navigate = useNavigate();
   const submit = useServerFn(createBooking);
   const [loading, setLoading] = useState(false);
   const [form, setForm] = useState({
-    name: "", email: "", phone: "",
-    service_type: "Full Detail" as (typeof SERVICES)[number],
-    preferred_date: "", preferred_time: TIMES[0],
-    vehicle_make: "", vehicle_model: "", vehicle_year: "",
+    name: "",
+    phone: "",
+    email: "",
+    vehicle_type: "" as (typeof VEHICLE_TYPES)[number] | "",
+    service_type: "" as (typeof SERVICES)[number] | "",
     notes: "",
   });
 
-  const set = (k: keyof typeof form) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) =>
-    setForm((f) => ({ ...f, [k]: e.target.value }));
+  const set = (k: keyof typeof form) =>
+    (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) =>
+      setForm((f) => ({ ...f, [k]: e.target.value }));
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!form.vehicle_type || !form.service_type) {
+      toast.error("Please select a vehicle type and service.");
+      return;
+    }
     setLoading(true);
     try {
-      await submit({ data: form });
-      toast.success("Booking received! We'll reach out shortly.");
-      setForm((f) => ({ ...f, notes: "", preferred_date: "" }));
-      navigate({ to: "/", hash: "book" });
+      await submit({ data: { ...form, vehicle_type: form.vehicle_type, service_type: form.service_type } });
+      toast.success("Quote request received! We'll be in touch shortly.");
+      setForm({ name: "", phone: "", email: "", vehicle_type: "", service_type: "", notes: "" });
     } catch (err: any) {
-      toast.error(err.message ?? "Could not submit booking");
+      toast.error(err.message ?? "Could not submit request");
     } finally {
       setLoading(false);
     }
   };
 
-  const today = new Date().toISOString().slice(0, 10);
-
   return (
-    <form onSubmit={handleSubmit} className="grid gap-5">
-      <div className="grid gap-5 sm:grid-cols-2">
-        <Field label="Name"><Input required maxLength={120} value={form.name} onChange={set("name")} /></Field>
-        <Field label="Email"><Input required type="email" maxLength={255} value={form.email} onChange={set("email")} /></Field>
-        <Field label="Phone"><Input required maxLength={30} value={form.phone} onChange={set("phone")} /></Field>
-        <Field label="Service">
-          <select required value={form.service_type} onChange={set("service_type")} className="h-9 w-full border border-input bg-background px-3 text-sm">
-            {SERVICES.map((s) => <option key={s} value={s}>{s}</option>)}
-          </select>
+    <form onSubmit={handleSubmit} className="grid gap-6 border border-border bg-card p-8 lg:p-10">
+      <div className="grid gap-6 sm:grid-cols-2">
+        <Field label="Your Name">
+          <Input required maxLength={120} placeholder="John Doe" value={form.name} onChange={set("name")} className="h-12 rounded-none border-border bg-background" />
         </Field>
-        <Field label="Preferred date"><Input required type="date" min={today} value={form.preferred_date} onChange={set("preferred_date")} /></Field>
-        <Field label="Preferred time">
-          <select required value={form.preferred_time} onChange={set("preferred_time")} className="h-9 w-full border border-input bg-background px-3 text-sm">
-            {TIMES.map((t) => <option key={t} value={t}>{t}</option>)}
-          </select>
+        <Field label="Phone Number">
+          <Input required maxLength={30} placeholder="(616) 555-0123" value={form.phone} onChange={set("phone")} className="h-12 rounded-none border-border bg-background" />
         </Field>
       </div>
-      <div className="grid gap-5 sm:grid-cols-3">
-        <Field label="Vehicle make"><Input required maxLength={60} placeholder="Ford" value={form.vehicle_make} onChange={set("vehicle_make")} /></Field>
-        <Field label="Vehicle model"><Input required maxLength={60} placeholder="F-150" value={form.vehicle_model} onChange={set("vehicle_model")} /></Field>
-        <Field label="Year"><Input required pattern="\d{4}" maxLength={4} placeholder="2022" value={form.vehicle_year} onChange={set("vehicle_year")} /></Field>
-      </div>
-      <Field label="Notes (optional)">
-        <Textarea maxLength={1000} rows={3} value={form.notes} onChange={set("notes")} placeholder="Anything we should know? Stains, pet hair, special requests..." />
+      <Field label="Email Address">
+        <Input required type="email" maxLength={255} placeholder="john@example.com" value={form.email} onChange={set("email")} className="h-12 rounded-none border-border bg-background" />
       </Field>
-      <Button type="submit" disabled={loading} variant="luxury" size="luxury" className="w-full sm:w-auto sm:self-start">
-        {loading ? "Submitting..." : "Submit booking"} <ArrowRight />
+      <div className="grid gap-6 sm:grid-cols-2">
+        <Field label="Vehicle Type">
+          <SelectBox required value={form.vehicle_type} onChange={set("vehicle_type")} placeholder="Select vehicle type" options={VEHICLE_TYPES} />
+        </Field>
+        <Field label="Service Needed">
+          <SelectBox required value={form.service_type} onChange={set("service_type")} placeholder="Select a service" options={SERVICES} />
+        </Field>
+      </div>
+      <Field label="Additional Details">
+        <Textarea
+          maxLength={1000}
+          rows={4}
+          value={form.notes}
+          onChange={set("notes")}
+          placeholder="Tell us about your vehicle and what you need..."
+          className="rounded-none border-border bg-background"
+        />
+      </Field>
+      <Button type="submit" disabled={loading} variant="luxury" size="luxury" className="w-full justify-center sm:w-auto sm:self-start">
+        {loading ? "Submitting..." : "Submit Quote Request"} <Send className="size-4" />
       </Button>
     </form>
+  );
+}
+
+function SelectBox({
+  value, onChange, options, placeholder, required,
+}: {
+  value: string;
+  onChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
+  options: readonly string[];
+  placeholder: string;
+  required?: boolean;
+}) {
+  return (
+    <div className="relative">
+      <select
+        required={required}
+        value={value}
+        onChange={onChange}
+        className="h-12 w-full appearance-none border border-border bg-background px-3 pr-9 text-sm text-foreground focus:border-primary focus:outline-none"
+      >
+        <option value="" disabled>{placeholder}</option>
+        {options.map((o) => <option key={o} value={o}>{o}</option>)}
+      </select>
+      <svg aria-hidden className="pointer-events-none absolute right-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" viewBox="0 0 20 20" fill="currentColor"><path d="M5.25 7.5L10 12.25 14.75 7.5z" /></svg>
+    </div>
   );
 }
 
 function Field({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <div>
-      <Label className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">{label}</Label>
-      <div className="mt-1.5">{children}</div>
+      <Label className="font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground">{label}</Label>
+      <div className="mt-2">{children}</div>
     </div>
   );
 }
