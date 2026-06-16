@@ -6,12 +6,14 @@ const bookingInput = z.object({
   name: z.string().trim().min(1).max(120),
   email: z.string().trim().email().max(255),
   phone: z.string().trim().min(7).max(30),
-  service_type: z.enum(["Interior Detail", "Exterior Detail", "Full Detail"]),
-  preferred_date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
-  preferred_time: z.string().min(1).max(40),
-  vehicle_make: z.string().trim().min(1).max(60),
-  vehicle_model: z.string().trim().min(1).max(60),
-  vehicle_year: z.string().trim().regex(/^\d{4}$/),
+  vehicle_type: z.enum(["Sedan", "SUV", "Truck", "Coupe", "Minivan", "Other"]),
+  service_type: z.enum([
+    "Interior Detail",
+    "Exterior Detail",
+    "Full Detail",
+    "Maintenance Wash",
+    "Not Sure / Other",
+  ]),
   notes: z.string().trim().max(1000).optional().default(""),
 });
 
