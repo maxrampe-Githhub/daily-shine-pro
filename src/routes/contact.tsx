@@ -81,6 +81,5 @@ function ContactRow({ icon, label, value, href }: { icon: React.ReactNode; label
       </span>
     </div>
   );
-  const external = href?.startsWith("http");
-  return <li>{href ? <a href={href} className="hover:text-primary" {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}>{content}</a> : content}</li>;
+  return <li>{href ? <a href={href} className="hover:text-primary">{content}</a> : content}</li>;
 }
