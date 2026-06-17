@@ -20,15 +20,21 @@ export const Route = createFileRoute("/gallery")({
 
 type Category = "All" | "Exterior" | "Interior" | "Foam Wash" | "Before & After";
 
+const B = "https://media.base44.com/images/public/6a19f1e4f74f64e6fc6e6824";
+
 const ITEMS: { src: string; alt: string; category: Exclude<Category, "All"> }[] = [
-  { src: "/images/instagram-truck.png", alt: "Detailed black RAM truck", category: "Exterior" },
-  { src: "/images/exterior.jpg", alt: "Polished exterior of a sports car", category: "Exterior" },
-  { src: "/images/interior.png", alt: "Detailed Porsche interior with steering wheel", category: "Interior" },
-  { src: "/images/before.png", alt: "Vehicle interior before detailing", category: "Before & After" },
-  { src: "/images/after.png", alt: "Vehicle interior after detailing", category: "Before & After" },
-  { src: "/images/full.jpg", alt: "Full detail result on a luxury vehicle", category: "Interior" },
-  { src: "/images/instagram-wash.jpg", alt: "GMC truck receiving foam wash", category: "Foam Wash" },
-  { src: "/images/hero.jpg", alt: "Premium detail final result", category: "Exterior" },
+  { src: `${B}/3fdfc006f_IMG_3559.jpg`, alt: "Black Truck Exterior", category: "Exterior" },
+  { src: `${B}/73ffcd95d_IMG_7609.jpg`, alt: "Porsche Exterior", category: "Exterior" },
+  { src: `${B}/7671c2361_IMG_7594.jpg`, alt: "Porsche Interior", category: "Interior" },
+  { src: `${B}/cd5b3adca_image.png`, alt: "Classic Interior", category: "Interior" },
+  { src: `${B}/afa74be66_image.png`, alt: "Clean White Interior", category: "Interior" },
+  { src: `${B}/5de52028d_image.png`, alt: "Clean Black Interior After", category: "Interior" },
+  { src: `${B}/c95e39304_IMG_3702.jpg`, alt: "White SUV Foam Wash", category: "Foam Wash" },
+  { src: `${B}/85101fc9d_IMG_3619.jpg`, alt: "GMC Truck Foam Wash", category: "Foam Wash" },
+  { src: `${B}/16e3bd2d4_image.png`, alt: "Before — Interior Floor", category: "Before & After" },
+  { src: `${B}/5de52028d_image.png`, alt: "After — Interior Floor", category: "Before & After" },
+  { src: `${B}/e0f19d0ae_image.png`, alt: "Before — Rear Seats", category: "Before & After" },
+  { src: `${B}/3cbd3acd5_image.png`, alt: "After — Rear Seats", category: "Before & After" },
 ];
 
 const CATEGORIES: Category[] = ["All", "Exterior", "Interior", "Foam Wash", "Before & After"];
