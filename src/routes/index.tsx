@@ -17,10 +17,11 @@ export const Route = createFileRoute("/")({
   component: Index,
 });
 
-const SERVICE_CARDS = [
-  { slug: "Interior Detail", title: "Interior Detail", image: "/images/interior.png", text: "Deep cleaning of every interior surface, carpet, seat, and dashboard. Leave your cabin spotless." },
-  { slug: "Exterior Detail", title: "Exterior Detail", image: "/images/exterior.jpg", text: "Full exterior wash, clay bar, polish, and sealant to restore your paint to showroom condition." },
-  { slug: "Full Detail", title: "Full Detail", image: "/images/full.jpg", text: "The complete package — inside and out. Our best-value, comprehensive vehicle transformation.", best: true },
+type ServiceCard = { slug?: string; title: string; image: string; text: string; best?: boolean; to: "/contact" | "/services" };
+const SERVICE_CARDS: ServiceCard[] = [
+  { title: "Interior Detail", image: "/images/interior.png", text: "Deep cleaning of every interior surface, carpet, seat, and dashboard. Leave your cabin spotless.", to: "/services" },
+  { slug: "Exterior Detail", title: "Exterior Detail", image: "/images/exterior.jpg", text: "Full exterior wash, clay bar, polish, and sealant to restore your paint to showroom condition.", to: "/contact" },
+  { slug: "Full Detail", title: "Full Detail", image: "/images/full.jpg", text: "The complete package — inside and out. Our best-value, comprehensive vehicle transformation.", best: true, to: "/contact" },
 ];
 
 function Index() {
