@@ -64,8 +64,8 @@ function Index() {
           {SERVICE_CARDS.map((service) => (
             <Link
               key={service.title}
-              to="/contact"
-              search={{ service: service.slug } as never}
+              to={service.to}
+              search={service.to === "/contact" && service.slug ? ({ service: service.slug } as never) : undefined}
               className="group block bg-background"
             >
               <div className="relative aspect-[4/3] overflow-hidden">
@@ -76,7 +76,7 @@ function Index() {
                 <h3 className="text-xl font-bold">{service.title}</h3>
                 <p className="mt-3 min-h-18 text-sm leading-6 text-muted-foreground">{service.text}</p>
                 <span className="mt-6 inline-flex items-center gap-2 font-mono text-[10px] uppercase tracking-widest text-primary">
-                  Book this <ArrowRight className="size-3" />
+                  {service.to === "/services" ? "View services" : "Book this"} <ArrowRight className="size-3" />
                 </span>
               </div>
             </Link>
