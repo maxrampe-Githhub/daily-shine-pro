@@ -33,25 +33,25 @@ function Index() {
         <img src="/images/hero.jpg" alt="Luxury Porsche interior after premium detailing" className="absolute inset-0 h-full w-full object-cover object-center" />
         <div className="absolute inset-0 bg-gradient-to-r from-background via-background/85 to-background/30" />
         <div className="relative mx-auto w-full max-w-6xl px-5 py-24 lg:px-8">
-          <div className="max-w-3xl">
+          <Reveal className="max-w-3xl">
             <p className="mb-6 font-mono text-[10px] uppercase tracking-[0.32em] text-primary">Premium auto detailing — Grand Rapids, MI</p>
             <h1 className="max-w-3xl text-5xl font-extrabold leading-[1.02] tracking-[-0.045em] sm:text-6xl lg:text-7xl">
               Premium Auto Detailing That Makes Your Car Look <span className="text-primary">Brand New</span>
             </h1>
             <p className="mt-7 max-w-xl text-base leading-7 text-muted-foreground sm:text-lg">Fast, reliable, high-quality detailing in Grand Rapids. We transform every vehicle with precision and care.</p>
             <div className="mt-9 flex flex-wrap gap-3">
-              <Button asChild variant="luxury" size="luxury"><Link to="/contact">Get a quote <ArrowRight /></Link></Button>
-              <Button asChild variant="luxuryOutline" size="luxury"><a href="tel:6162801218"><Phone /> Call now</a></Button>
+              <Button asChild variant="luxury" size="luxury"><Link to="/contact" className="hover:-translate-y-0.5">Get a quote <ArrowRight /></Link></Button>
+              <Button asChild variant="luxuryOutline" size="luxury"><a href="tel:6162801218" className="hover:-translate-y-0.5"><Phone /> Call now</a></Button>
             </div>
-          </div>
-          <div className="mt-16 flex gap-10 sm:gap-16">
+          </Reveal>
+          <Reveal delay={150} className="mt-16 flex gap-10 sm:gap-16">
             {[['50+','Cars detailed'],['5★','Avg. rating'],['99%','Satisfaction']].map(([n,l]) => (
               <div key={l}>
                 <strong className="text-2xl">{n}</strong>
                 <span className="mt-1 block font-mono text-[9px] uppercase tracking-[0.18em] text-muted-foreground">{l}</span>
               </div>
             ))}
-          </div>
+          </Reveal>
         </div>
       </section>
 
