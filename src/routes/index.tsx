@@ -143,23 +143,27 @@ function Index() {
           </a>
         </div>
         <div className="mt-12 grid grid-cols-2 gap-4">
-          <img src="/images/instagram-truck.png" alt="Detailed black RAM truck" loading="lazy" className="aspect-square w-full object-cover" />
-          <img src="/images/instagram-wash.jpg" alt="GMC truck receiving foam wash" loading="lazy" className="aspect-square w-full object-cover" />
+          <Reveal className="overflow-hidden">
+            <img src="/images/instagram-truck.png" alt="Detailed black RAM truck" loading="lazy" className="aspect-square w-full object-cover transition duration-700 hover:scale-105" />
+          </Reveal>
+          <Reveal delay={150} className="overflow-hidden">
+            <img src="/images/instagram-wash.jpg" alt="GMC truck receiving foam wash" loading="lazy" className="aspect-square w-full object-cover transition duration-700 hover:scale-105" />
+          </Reveal>
         </div>
       </section>
 
       <section className="border-t border-border bg-background px-5 py-24 text-center lg:py-32">
-        <div className="mx-auto max-w-2xl">
+        <Reveal className="mx-auto max-w-2xl">
           <p className="font-mono text-[10px] uppercase tracking-[0.3em] text-primary">Ready when you are</p>
           <h2 className="mt-5 text-4xl font-extrabold tracking-[-0.035em] sm:text-5xl">Ready to Experience the Difference?</h2>
           <p className="mt-5 text-base leading-7 text-muted-foreground">
             Book your detail today and let us bring your vehicle back to showroom condition.
           </p>
           <div className="mt-8 flex flex-wrap justify-center gap-3">
-            <Button asChild variant="luxury" size="luxury"><Link to="/contact">Get a quote <ArrowRight /></Link></Button>
-            <Button asChild variant="luxuryOutline" size="luxury"><a href="tel:6162801218"><Phone /> Call (616) 280-1218</a></Button>
+            <Button asChild variant="luxury" size="luxury"><Link to="/contact" className="hover:-translate-y-0.5">Get a quote <ArrowRight /></Link></Button>
+            <Button asChild variant="luxuryOutline" size="luxury"><a href="tel:6162801218" className="hover:-translate-y-0.5"><Phone /> Call (616) 280-1218</a></Button>
           </div>
-        </div>
+        </Reveal>
       </section>
 
       <SiteFooter />
