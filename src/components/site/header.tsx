@@ -46,7 +46,7 @@ export function SiteHeader() {
             <Link
               key={n.to}
               to={n.to}
-              className="hover:text-primary"
+              className="relative hover:text-primary after:absolute after:left-0 after:-bottom-1 after:h-px after:w-full after:origin-left after:scale-x-0 after:bg-primary after:transition-transform after:duration-300 hover:after:scale-x-100"
               activeOptions={{ exact: true }}
               activeProps={{ className: "text-primary" }}
             >
