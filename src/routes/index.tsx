@@ -92,14 +92,14 @@ function Index() {
             <Button asChild variant="luxuryOutline" className="hidden sm:inline-flex"><Link to="/gallery">View gallery <ArrowRight /></Link></Button>
           </div>
           <div className="mt-12 grid gap-4 md:grid-cols-2">
-            <figure className="relative overflow-hidden">
-              <img src="/images/before.png" alt="Vehicle interior before detailing" loading="lazy" className="aspect-[4/3] h-full w-full object-cover" />
+            <Reveal as="figure" className="group relative overflow-hidden">
+              <img src="/images/before.png" alt="Vehicle interior before detailing" loading="lazy" className="aspect-[4/3] h-full w-full object-cover transition duration-700 group-hover:scale-105" />
               <figcaption className="absolute bottom-4 left-4 bg-background px-4 py-2 font-mono text-[10px] uppercase tracking-widest">Before</figcaption>
-            </figure>
-            <figure className="relative overflow-hidden">
-              <img src="/images/after.png" alt="Vehicle interior after detailing" loading="lazy" className="aspect-[4/3] h-full w-full object-cover" />
+            </Reveal>
+            <Reveal as="figure" delay={150} className="group relative overflow-hidden">
+              <img src="/images/after.png" alt="Vehicle interior after detailing" loading="lazy" className="aspect-[4/3] h-full w-full object-cover transition duration-700 group-hover:scale-105" />
               <figcaption className="absolute bottom-4 left-4 bg-primary px-4 py-2 font-mono text-[10px] uppercase tracking-widest text-primary-foreground">After</figcaption>
-            </figure>
+            </Reveal>
           </div>
         </div>
       </section>
