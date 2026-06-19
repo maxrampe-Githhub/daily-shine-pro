@@ -107,12 +107,12 @@ function Index() {
       <section className="mx-auto max-w-6xl px-5 py-24 lg:px-8 lg:py-32">
         <SectionHeading eyebrow="The difference" title="Why Choose Daily Detailers" />
         <div className="mt-12 grid border-l border-t border-border sm:grid-cols-2 lg:grid-cols-3">
-          {[['Fast Turnaround','Quick, efficient service without cutting corners.'],['Premium Products','Professional-grade products for lasting results.'],['Experienced Team','Skilled detailers with a passion for perfection.'],['Reliable Service','Consistent quality you can count on every time.'],['99% Satisfaction','We stand behind every detail and every result.'],['Attention to Detail','Every inch gets the precision treatment it deserves.']].map(([t,d]) => (
-            <div key={t} className="border-b border-r border-border p-8">
+          {[['Fast Turnaround','Quick, efficient service without cutting corners.'],['Premium Products','Professional-grade products for lasting results.'],['Experienced Team','Skilled detailers with a passion for perfection.'],['Reliable Service','Consistent quality you can count on every time.'],['99% Satisfaction','We stand behind every detail and every result.'],['Attention to Detail','Every inch gets the precision treatment it deserves.']].map(([t,d], i) => (
+            <Reveal key={t} delay={(i % 3) * 100} className="border-b border-r border-border p-8 transition-colors duration-300 hover:bg-card">
               <Check className="mb-6 size-5 text-primary" />
               <h3 className="font-bold">{t}</h3>
               <p className="mt-2 text-sm leading-6 text-muted-foreground">{d}</p>
-            </div>
+            </Reveal>
           ))}
         </div>
       </section>
