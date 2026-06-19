@@ -61,25 +61,26 @@ function Index() {
           <Button asChild variant="luxuryOutline" className="hidden sm:inline-flex"><Link to="/services">All services <ArrowRight /></Link></Button>
         </div>
         <div className="mt-12 grid gap-px bg-border md:grid-cols-3">
-          {SERVICE_CARDS.map((service) => (
-            <Link
-              key={service.title}
-              to={service.to}
-              search={service.to === "/contact" ? ({ service: service.slug } as never) : undefined}
-              className="group block bg-background"
-            >
-              <div className="relative aspect-[4/3] overflow-hidden">
-                <img src={service.image} alt={`${service.title} by Daily Detailers`} loading="lazy" className="h-full w-full object-cover transition duration-700 group-hover:scale-105" />
-                {service.best && <span className="absolute right-4 top-4 bg-primary px-3 py-2 font-mono text-[9px] uppercase tracking-widest text-primary-foreground">Best value</span>}
-              </div>
-              <div className="p-7">
-                <h3 className="text-xl font-bold">{service.title}</h3>
-                <p className="mt-3 min-h-18 text-sm leading-6 text-muted-foreground">{service.text}</p>
-                <span className="mt-6 inline-flex items-center gap-2 font-mono text-[10px] uppercase tracking-widest text-primary">
-                  {service.to === "/services" ? "View pricing" : "Book this"} <ArrowRight className="size-3" />
-                </span>
-              </div>
-            </Link>
+          {SERVICE_CARDS.map((service, i) => (
+            <Reveal key={service.title} delay={i * 120}>
+              <Link
+                to={service.to}
+                search={service.to === "/contact" ? ({ service: service.slug } as never) : undefined}
+                className="group block h-full bg-background transition-colors duration-300 hover:bg-card"
+              >
+                <div className="relative aspect-[4/3] overflow-hidden">
+                  <img src={service.image} alt={`${service.title} by Daily Detailers`} loading="lazy" className="h-full w-full object-cover transition duration-700 group-hover:scale-110" />
+                  {service.best && <span className="absolute right-4 top-4 bg-primary px-3 py-2 font-mono text-[9px] uppercase tracking-widest text-primary-foreground">Best value</span>}
+                </div>
+                <div className="p-7">
+                  <h3 className="text-xl font-bold transition-colors duration-300 group-hover:text-primary">{service.title}</h3>
+                  <p className="mt-3 min-h-18 text-sm leading-6 text-muted-foreground">{service.text}</p>
+                  <span className="mt-6 inline-flex items-center gap-2 font-mono text-[10px] uppercase tracking-widest text-primary">
+                    {service.to === "/services" ? "View pricing" : "Book this"} <ArrowRight className="size-3 transition-transform duration-300 group-hover:translate-x-1" />
+                  </span>
+                </div>
+              </Link>
+            </Reveal>
           ))}
         </div>
       </section>
