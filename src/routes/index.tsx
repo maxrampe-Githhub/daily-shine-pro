@@ -124,12 +124,12 @@ function Index() {
             <Button asChild variant="luxuryOutline" className="hidden sm:inline-flex"><Link to="/reviews">All reviews <ArrowRight /></Link></Button>
           </div>
           <div className="mt-12 grid gap-px bg-border md:grid-cols-2">
-            {[["Great experience, good kids. Fast, reliable, and hardworking. Highly recommend them if you want fast and high-quality cleaning!",'Mia Africa'],["They do a great job and get it done quick!",'Esand']].map(([q,a]) => (
-              <blockquote key={a} className="bg-card p-8 lg:p-12">
-                <div className="flex gap-1 text-primary">{Array.from({length:5}).map((_,i)=><Star key={i} className="size-4 fill-current" />)}</div>
+            {[["Great experience, good kids. Fast, reliable, and hardworking. Highly recommend them if you want fast and high-quality cleaning!",'Mia Africa'],["They do a great job and get it done quick!",'Esand']].map(([q,a], i) => (
+              <Reveal as="blockquote" key={a} delay={i * 150} className="bg-card p-8 lg:p-12">
+                <div className="flex gap-1 text-primary">{Array.from({length:5}).map((_,j)=><Star key={j} className="size-4 fill-current" />)}</div>
                 <p className="mt-7 text-xl font-medium leading-8">“{q}”</p>
                 <footer className="mt-7 font-mono text-[10px] uppercase tracking-widest text-muted-foreground">— {a}</footer>
-              </blockquote>
+              </Reveal>
             ))}
           </div>
         </div>
