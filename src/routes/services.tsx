@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowRight, Check, Sparkles } from "lucide-react";
+import { ArrowRight, Check, Flame, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { SiteHeader } from "@/components/site/header";
 import { SiteFooter } from "@/components/site/footer";
@@ -8,7 +8,7 @@ export const Route = createFileRoute("/services")({
   head: () => ({
     meta: [
       { title: "Services & Pricing | Daily Detailers" },
-      { name: "description", content: "Transparent pricing and premium detailing packages — interior, exterior, full detail, and maintenance wash." },
+      { name: "description", content: "Transparent pricing and premium detailing packages — interior, exterior, and combo." },
       { property: "og:title", content: "Services & Pricing | Daily Detailers" },
       { property: "og:description", content: "Every package built to deliver a showroom result." },
     ],
@@ -17,11 +17,13 @@ export const Route = createFileRoute("/services")({
 });
 
 type Pkg = {
-  slug: "Interior Detail" | "Exterior Detail" | "Full Detail" | "Maintenance Wash";
+  slug: string;
   title: string;
   blurb: string;
   process: string[];
   pricing: { label: string; price: string }[];
+  highlight?: string;
+  highlightItems?: string[];
 };
 
 const PACKAGES: Pkg[] = [
@@ -58,16 +60,16 @@ const PACKAGES: Pkg[] = [
       "Tire dressing and trim restoration",
     ],
     pricing: [
-      { label: "Coupe", price: "$90" },
-      { label: "Sedan / Hatchback", price: "$100" },
-      { label: "Small SUV", price: "$110" },
+      { label: "Coupe", price: "$100" },
+      { label: "Sedan / Hatchback", price: "$110" },
+      { label: "Small SUV", price: "$115" },
       { label: "Truck", price: "$120" },
       { label: "Large SUV", price: "$130" },
     ],
   },
   {
     slug: "Full Detail",
-    title: "Full Detail Package",
+    title: "Combo (Interior & Exterior)",
     blurb: "The complete transformation — every interior surface and exterior panel brought back to showroom standard. Our best value.",
     process: [
       "Everything in the Interior Package",
@@ -76,26 +78,14 @@ const PACKAGES: Pkg[] = [
       "Final inspection and touch-up pass",
     ],
     pricing: [
-      { label: "Coupe", price: "$200" },
-      { label: "Sedan / Hatchback", price: "$220" },
-      { label: "Small SUV", price: "$235" },
-      { label: "Truck", price: "$250" },
-      { label: "Large SUV", price: "$275" },
+      { label: "Coupe", price: "$175" },
+      { label: "Sedan / Hatchback", price: "$200" },
+      { label: "Small SUV", price: "$210" },
+      { label: "Truck", price: "$225" },
+      { label: "Large SUV", price: "$235" },
     ],
-  },
-  {
-    slug: "Maintenance Wash",
-    title: "Maintenance Wash",
-    blurb: "A quick refresh between full details to keep your vehicle clean week after week.",
-    process: [
-      "Exterior hand wash and rinse",
-      "Wheel and tire clean",
-      "Quick interior vacuum",
-      "Window cleaning inside and out",
-    ],
-    pricing: [
-      { label: "Any vehicle", price: "from $60" },
-    ],
+    highlight: "Includes FREE premium add-ons",
+    highlightItems: ["Odor Removal", "Tire Shine", "Wax"],
   },
 ];
 
@@ -123,11 +113,25 @@ function ServicesPage() {
           <article key={pkg.slug} className="border border-border bg-card">
             <header className="flex items-start gap-5 border-b border-border p-7 lg:p-10">
               <span className="grid size-12 shrink-0 place-items-center border border-border bg-background text-primary">
-                <Sparkles className="size-5" />
+                {pkg.slug === "Full Detail" ? <Flame className="size-5" /> : <Sparkles className="size-5" />}
               </span>
-              <div>
+              <div className="min-w-0">
                 <h2 className="text-2xl font-bold">{pkg.title}</h2>
                 <p className="mt-2 max-w-2xl text-sm leading-6 text-muted-foreground">{pkg.blurb}</p>
+                {pkg.highlight && (
+                  <div className="mt-4 flex flex-wrap items-center gap-3 rounded-none border border-primary/30 bg-primary/10 px-4 py-2.5">
+                    <Flame className="size-4 shrink-0 text-primary" />
+                    <span className="text-xs font-semibold uppercase tracking-wider text-primary">{pkg.highlight}</span>
+                    <span className="hidden h-4 w-px bg-primary/30 sm:inline-block" />
+                    <div className="flex flex-wrap gap-2">
+                      {pkg.highlightItems?.map((item) => (
+                        <span key={item} className="rounded-none bg-primary px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-primary-foreground">
+                          {item}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                )}
               </div>
             </header>
             <div className="grid gap-px bg-border lg:grid-cols-[1.4fr_1fr]">
@@ -167,3 +171,4 @@ function ServicesPage() {
     </main>
   );
 }
+
