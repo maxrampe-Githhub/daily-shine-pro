@@ -66,6 +66,20 @@ export function BookingForm({ defaultService }: { defaultService?: (typeof SERVI
 
   return (
     <form onSubmit={handleSubmit} className="grid gap-6 border border-border bg-card p-8 lg:p-10">
+      {status && (
+        <div
+          role={status.kind === "error" ? "alert" : "status"}
+          aria-live="polite"
+          className={
+            "border px-4 py-3 text-sm " +
+            (status.kind === "success"
+              ? "border-green-500/40 bg-green-500/10 text-green-400"
+              : "border-red-500/40 bg-red-500/10 text-red-400")
+          }
+        >
+          {status.message}
+        </div>
+      )}
       <div className="grid gap-6 sm:grid-cols-2">
         <Field label="Your Name">
           <Input required maxLength={120} placeholder="John Doe" value={form.name} onChange={set("name")} className="h-12 rounded-none border-border bg-background" />
