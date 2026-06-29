@@ -20,6 +20,7 @@ export const SERVICES = [
 export function BookingForm({ defaultService }: { defaultService?: (typeof SERVICES)[number] }) {
   const submit = useServerFn(createBooking);
   const [loading, setLoading] = useState(false);
+  const [status, setStatus] = useState<{ kind: "success" | "error"; message: string } | null>(null);
   const [form, setForm] = useState({
     name: "",
     phone: "",
@@ -35,17 +36,29 @@ export function BookingForm({ defaultService }: { defaultService?: (typeof SERVI
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setStatus(null);
+    console.log("[BookingForm] submit clicked", form);
     if (!form.vehicle_type || !form.service_type) {
-      toast.error("Please select a vehicle type and service.");
+      const msg = "Please select a vehicle type and service.";
+      setStatus({ kind: "error", message: msg });
+      toast.error(msg);
       return;
     }
     setLoading(true);
     try {
-      await submit({ data: { ...form, vehicle_type: form.vehicle_type, service_type: form.service_type } });
-      toast.success("Quote request received! We'll be in touch shortly.");
+      const payload = { ...form, vehicle_type: form.vehicle_type, service_type: form.service_type };
+      console.log("[BookingForm] calling createBooking", payload);
+      const result = await submit({ data: payload });
+      console.log("[BookingForm] createBooking success", result);
+      const msg = "Quote request received! We'll be in touch shortly.";
+      setStatus({ kind: "success", message: msg });
+      toast.success(msg);
       setForm({ name: "", phone: "", email: "", vehicle_type: "", service_type: (defaultService ?? "") as any, notes: "" });
     } catch (err: any) {
-      toast.error(err?.message ?? "Could not submit request");
+      console.error("[BookingForm] createBooking failed", err);
+      const msg = err?.message ?? "Could not submit request";
+      setStatus({ kind: "error", message: msg });
+      toast.error(msg);
     } finally {
       setLoading(false);
     }
