@@ -53,12 +53,14 @@ async function sendNotificationEmail(booking: z.infer<typeof bookingInput>, id: 
         html,
       }),
     });
+    const txt = await res.text();
     if (!res.ok) {
-      const txt = await res.text();
-      console.error("Resend send failed", res.status, txt);
+      console.error("[sendNotificationEmail] Resend send failed", res.status, txt);
+    } else {
+      console.log("[sendNotificationEmail] Resend send ok", res.status, txt);
     }
   } catch (err) {
-    console.error("Resend send error", err);
+    console.error("[sendNotificationEmail] Resend send error", err);
   }
 }
 
