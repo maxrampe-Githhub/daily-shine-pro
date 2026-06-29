@@ -64,13 +64,18 @@ async function sendNotificationEmail(booking: z.infer<typeof bookingInput>, id: 
 export const createBooking = createServerFn({ method: "POST" })
   .inputValidator((d: unknown) => bookingInput.parse(d))
   .handler(async ({ data }) => {
+    console.log("[createBooking] received", { name: data.name, email: data.email, service: data.service_type });
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     const { data: row, error } = await supabaseAdmin
       .from("bookings")
       .insert({ ...data, user_id: null })
       .select("id")
       .single();
-    if (error) throw new Error(error.message);
+    if (error) {
+      console.error("[createBooking] insert failed", error);
+      throw new Error(error.message);
+    }
+    console.log("[createBooking] inserted", row.id);
     await sendNotificationEmail(data, row.id);
     return { id: row.id };
   });
