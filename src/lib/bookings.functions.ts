@@ -22,8 +22,9 @@ const NOTIFY_TO = "dailydetailers123@gmail.com";
 async function sendNotificationEmail(booking: z.infer<typeof bookingInput>, id: string) {
   const apiKey = process.env.LOVABLE_API_KEY;
   const resendKey = process.env.RESEND_API_KEY;
+  console.log("[sendNotificationEmail] keys present", { lovable: !!apiKey, resend: !!resendKey });
   if (!apiKey || !resendKey) {
-    console.warn("Email keys missing; skipping notification");
+    console.warn("[sendNotificationEmail] Email keys missing; skipping notification");
     return;
   }
   const html = `
@@ -52,25 +53,32 @@ async function sendNotificationEmail(booking: z.infer<typeof bookingInput>, id: 
         html,
       }),
     });
+    const txt = await res.text();
     if (!res.ok) {
-      const txt = await res.text();
-      console.error("Resend send failed", res.status, txt);
+      console.error("[sendNotificationEmail] Resend send failed", res.status, txt);
+    } else {
+      console.log("[sendNotificationEmail] Resend send ok", res.status, txt);
     }
   } catch (err) {
-    console.error("Resend send error", err);
+    console.error("[sendNotificationEmail] Resend send error", err);
   }
 }
 
 export const createBooking = createServerFn({ method: "POST" })
   .inputValidator((d: unknown) => bookingInput.parse(d))
   .handler(async ({ data }) => {
+    console.log("[createBooking] received", { name: data.name, email: data.email, service: data.service_type });
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     const { data: row, error } = await supabaseAdmin
       .from("bookings")
       .insert({ ...data, user_id: null })
       .select("id")
       .single();
-    if (error) throw new Error(error.message);
+    if (error) {
+      console.error("[createBooking] insert failed", error);
+      throw new Error(error.message);
+    }
+    console.log("[createBooking] inserted", row.id);
     await sendNotificationEmail(data, row.id);
     return { id: row.id };
   });

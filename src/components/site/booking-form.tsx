@@ -20,6 +20,7 @@ export const SERVICES = [
 export function BookingForm({ defaultService }: { defaultService?: (typeof SERVICES)[number] }) {
   const submit = useServerFn(createBooking);
   const [loading, setLoading] = useState(false);
+  const [status, setStatus] = useState<{ kind: "success" | "error"; message: string } | null>(null);
   const [form, setForm] = useState({
     name: "",
     phone: "",
@@ -35,17 +36,29 @@ export function BookingForm({ defaultService }: { defaultService?: (typeof SERVI
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setStatus(null);
+    console.log("[BookingForm] submit clicked", form);
     if (!form.vehicle_type || !form.service_type) {
-      toast.error("Please select a vehicle type and service.");
+      const msg = "Please select a vehicle type and service.";
+      setStatus({ kind: "error", message: msg });
+      toast.error(msg);
       return;
     }
     setLoading(true);
     try {
-      await submit({ data: { ...form, vehicle_type: form.vehicle_type, service_type: form.service_type } });
-      toast.success("Quote request received! We'll be in touch shortly.");
+      const payload = { ...form, vehicle_type: form.vehicle_type, service_type: form.service_type };
+      console.log("[BookingForm] calling createBooking", payload);
+      const result = await submit({ data: payload });
+      console.log("[BookingForm] createBooking success", result);
+      const msg = "Quote request received! We'll be in touch shortly.";
+      setStatus({ kind: "success", message: msg });
+      toast.success(msg);
       setForm({ name: "", phone: "", email: "", vehicle_type: "", service_type: (defaultService ?? "") as any, notes: "" });
     } catch (err: any) {
-      toast.error(err?.message ?? "Could not submit request");
+      console.error("[BookingForm] createBooking failed", err);
+      const msg = err?.message ?? "Could not submit request";
+      setStatus({ kind: "error", message: msg });
+      toast.error(msg);
     } finally {
       setLoading(false);
     }
@@ -53,6 +66,20 @@ export function BookingForm({ defaultService }: { defaultService?: (typeof SERVI
 
   return (
     <form onSubmit={handleSubmit} className="grid gap-6 border border-border bg-card p-8 lg:p-10">
+      {status && (
+        <div
+          role={status.kind === "error" ? "alert" : "status"}
+          aria-live="polite"
+          className={
+            "border px-4 py-3 text-sm " +
+            (status.kind === "success"
+              ? "border-green-500/40 bg-green-500/10 text-green-400"
+              : "border-red-500/40 bg-red-500/10 text-red-400")
+          }
+        >
+          {status.message}
+        </div>
+      )}
       <div className="grid gap-6 sm:grid-cols-2">
         <Field label="Your Name">
           <Input required maxLength={120} placeholder="John Doe" value={form.name} onChange={set("name")} className="h-12 rounded-none border-border bg-background" />
