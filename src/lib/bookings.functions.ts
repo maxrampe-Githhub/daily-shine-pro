@@ -22,8 +22,9 @@ const NOTIFY_TO = "dailydetailers123@gmail.com";
 async function sendNotificationEmail(booking: z.infer<typeof bookingInput>, id: string) {
   const apiKey = process.env.LOVABLE_API_KEY;
   const resendKey = process.env.RESEND_API_KEY;
+  console.log("[sendNotificationEmail] keys present", { lovable: !!apiKey, resend: !!resendKey });
   if (!apiKey || !resendKey) {
-    console.warn("Email keys missing; skipping notification");
+    console.warn("[sendNotificationEmail] Email keys missing; skipping notification");
     return;
   }
   const html = `
