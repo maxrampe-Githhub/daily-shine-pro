@@ -81,10 +81,14 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "description", content: "Premium interior and exterior auto detailing in Grand Rapids, Michigan. Fast, reliable service with showroom-quality results." },
       { name: "author", content: "Daily Detailers" },
       { property: "og:title", content: "Daily Detailers | Grand Rapids Auto Detailing" },
-      { property: "og:description", content: "Premium auto detailing that makes your car look brand new." },
+      { property: "og:description", content: "Premium interior and exterior auto detailing in Grand Rapids, Michigan. Fast, reliable service with showroom-quality results." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
       { name: "twitter:site", content: "@Lovable" },
+      { name: "twitter:title", content: "Daily Detailers | Grand Rapids Auto Detailing" },
+      { name: "twitter:description", content: "Premium interior and exterior auto detailing in Grand Rapids, Michigan. Fast, reliable service with showroom-quality results." },
+      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/3310f5d7-442c-4f02-bfac-c0d42828dc27/id-preview-874c33d5--fc76e654-ebee-432d-ac83-47b65a7d9c38.lovable.app-1782745563406.png" },
+      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/3310f5d7-442c-4f02-bfac-c0d42828dc27/id-preview-874c33d5--fc76e654-ebee-432d-ac83-47b65a7d9c38.lovable.app-1782745563406.png" },
     ],
     links: [
       {
