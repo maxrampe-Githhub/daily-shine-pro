@@ -20,11 +20,10 @@ const bookingInput = z.object({
 const NOTIFY_TO = "dailydetailers123@gmail.com";
 
 async function sendNotificationEmail(booking: z.infer<typeof bookingInput>, id: string) {
-  const apiKey = process.env.LOVABLE_API_KEY;
   const resendKey = process.env.RESEND_API_KEY;
-  console.log("[sendNotificationEmail] keys present", { lovable: !!apiKey, resend: !!resendKey });
-  if (!apiKey || !resendKey) {
-    console.warn("[sendNotificationEmail] Email keys missing; skipping notification");
+  console.log("[sendNotificationEmail] resend key present", !!resendKey);
+  if (!resendKey) {
+    console.warn("[sendNotificationEmail] RESEND_API_KEY missing; skipping notification");
     return;
   }
   const html = `
@@ -38,12 +37,11 @@ async function sendNotificationEmail(booking: z.infer<typeof bookingInput>, id: 
     <p style="color:#888;font-size:12px;">Booking ID: ${id}</p>
   `;
   try {
-    const res = await fetch("https://connector-gateway.lovable.dev/resend/emails", {
+    const res = await fetch("https://api.resend.com/emails", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${apiKey}`,
-        "X-Connection-Api-Key": resendKey,
+        Authorization: `Bearer ${resendKey}`,
       },
       body: JSON.stringify({
         from: "Daily Detailers <onboarding@resend.dev>",
