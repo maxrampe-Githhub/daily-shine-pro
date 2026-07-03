@@ -1,0 +1,104 @@
+{
+  "version": 1,
+  "sdk_version": "0.20.0",
+  "path": "/mcp",
+  "auth": {
+    "type": "none"
+  },
+  "mcp": {
+    "server": {
+      "name": "daily-detailers-mcp",
+      "version": "0.1.0",
+      "title": "Daily Detailers MCP"
+    },
+    "tools": [
+      {
+        "name": "list_services",
+        "title": "List services",
+        "description": "List the auto detailing services offered by Daily Detailers.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "create_booking",
+        "title": "Create booking quote request",
+        "description": "Submit a new quote request / booking for Daily Detailers. Captures customer contact info, vehicle type, and requested service.",
+        "annotations": {
+          "readOnlyHint": false,
+          "destructiveHint": false,
+          "openWorldHint": true
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 120,
+              "description": "Customer full name."
+            },
+            "email": {
+              "type": "string",
+              "maxLength": 255,
+              "format": "email",
+              "pattern": "^(?!\\.)(?!.*\\.\\.)([A-Za-z0-9_'+\\-\\.]*)[A-Za-z0-9_+-]@([A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$",
+              "description": "Customer email address."
+            },
+            "phone": {
+              "type": "string",
+              "minLength": 7,
+              "maxLength": 30,
+              "description": "Customer phone number."
+            },
+            "vehicle_type": {
+              "type": "string",
+              "enum": [
+                "Sedan",
+                "SUV",
+                "Truck",
+                "Coupe",
+                "Minivan",
+                "Other"
+              ],
+              "description": "Type of vehicle."
+            },
+            "service_type": {
+              "type": "string",
+              "enum": [
+                "Interior Detail",
+                "Exterior Detail",
+                "Full Detail",
+                "Maintenance Wash",
+                "Not Sure / Other"
+              ],
+              "description": "Service requested."
+            },
+            "notes": {
+              "description": "Any additional details from the customer.",
+              "type": "string",
+              "maxLength": 1000
+            }
+          },
+          "required": [
+            "name",
+            "email",
+            "phone",
+            "vehicle_type",
+            "service_type"
+          ]
+        },
+        "outputSchema": null
+      }
+    ]
+  }
+}
