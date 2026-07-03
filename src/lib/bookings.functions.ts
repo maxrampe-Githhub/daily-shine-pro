@@ -44,7 +44,7 @@ async function sendNotificationEmail(booking: z.infer<typeof bookingInput>, id: 
         Authorization: `Bearer ${resendKey}`,
       },
       body: JSON.stringify({
-        from: "Daily Detailers <onboarding@resend.dev>",
+        from: "Daily Detailers <quotes@dailydetailers.com>",
         to: [NOTIFY_TO],
         reply_to: booking.email,
         subject: `New booking: ${booking.name} — ${booking.service_type}`,
