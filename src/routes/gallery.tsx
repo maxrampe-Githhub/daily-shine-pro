@@ -41,8 +41,26 @@ const CATEGORIES: Category[] = ["All", "Exterior", "Interior", "Foam Wash", "Bef
 
 function GalleryPage() {
   const [active, setActive] = useState<Category>("All");
-  const [open, setOpen] = useState<(typeof ITEMS)[number] | null>(null);
+  const [openIndex, setOpenIndex] = useState<number | null>(null);
   const items = active === "All" ? ITEMS : ITEMS.filter((i) => i.category === active);
+  const open = openIndex === null ? null : items[openIndex];
+
+  const step = useCallback(
+    (dir: 1 | -1) => {
+      setOpenIndex((i) => (i === null ? i : (i + dir + items.length) % items.length));
+    },
+    [items.length],
+  );
+
+  useEffect(() => {
+    if (openIndex === null) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "ArrowRight") step(1);
+      else if (e.key === "ArrowLeft") step(-1);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [openIndex, step]);
 
   return (
     <main className="min-h-screen bg-background text-foreground">
