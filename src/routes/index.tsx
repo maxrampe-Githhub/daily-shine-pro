@@ -45,7 +45,7 @@ function Index() {
             </div>
           </Reveal>
           <Reveal delay={150} className="mt-16 flex gap-10 sm:gap-16">
-            {[['50+','Cars detailed'],['5★','Avg. rating'],['99%','Satisfaction']].map(([n,l]) => (
+            {[['100+','Cars detailed'],['5★','Avg. rating'],['99%','Satisfaction']].map(([n,l]) => (
               <div key={l}>
                 <strong className="text-2xl">{n}</strong>
                 <span className="mt-1 block font-mono text-[9px] uppercase tracking-[0.18em] text-muted-foreground">{l}</span>
