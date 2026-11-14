@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { SiteHeader } from "@/components/site/header";
 import { SiteFooter } from "@/components/site/footer";
@@ -41,8 +41,26 @@ const CATEGORIES: Category[] = ["All", "Exterior", "Interior", "Foam Wash", "Bef
 
 function GalleryPage() {
   const [active, setActive] = useState<Category>("All");
-  const [open, setOpen] = useState<(typeof ITEMS)[number] | null>(null);
+  const [openIndex, setOpenIndex] = useState<number | null>(null);
   const items = active === "All" ? ITEMS : ITEMS.filter((i) => i.category === active);
+  const open = openIndex === null ? null : items[openIndex];
+
+  const step = useCallback(
+    (dir: 1 | -1) => {
+      setOpenIndex((i) => (i === null ? i : (i + dir + items.length) % items.length));
+    },
+    [items.length],
+  );
+
+  useEffect(() => {
+    if (openIndex === null) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "ArrowRight") step(1);
+      else if (e.key === "ArrowLeft") step(-1);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [openIndex, step]);
 
   return (
     <main className="min-h-screen bg-background text-foreground">
@@ -74,8 +92,8 @@ function GalleryPage() {
           </div>
 
           <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {items.map((item) => (
-              <figure key={item.src + item.alt} onClick={() => setOpen(item)} role="button" tabIndex={0} aria-label={`Enlarge ${item.alt}`} onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") setOpen(item); }} className="group relative cursor-zoom-in overflow-hidden border border-border bg-card">
+            {items.map((item, idx) => (
+              <figure key={item.src + item.alt} onClick={() => setOpenIndex(idx)} role="button" tabIndex={0} aria-label={`Enlarge ${item.alt}`} onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") setOpenIndex(idx); }} className="group relative cursor-zoom-in overflow-hidden border border-border bg-card">
                 <img src={item.src} alt={item.alt} loading="lazy" className="aspect-[4/3] h-full w-full object-cover transition duration-700 group-hover:scale-105" />
                 <figcaption className="absolute bottom-3 left-3 bg-background/90 px-3 py-1.5 font-mono text-[9px] uppercase tracking-widest">
                   {item.category}
@@ -93,11 +111,31 @@ function GalleryPage() {
         </div>
       </section>
 
-      <Dialog open={!!open} onOpenChange={(o) => !o && setOpen(null)}>
+      <Dialog open={!!open} onOpenChange={(o) => !o && setOpenIndex(null)}>
         <DialogContent className="max-w-5xl border-border bg-background p-2 sm:p-3">
           <DialogTitle className="sr-only">{open?.alt}</DialogTitle>
           {open && <img src={open.src} alt={open.alt} className="max-h-[85vh] w-full object-contain" />}
-          {open && <p className="px-1 pb-1 font-mono text-[10px] uppercase tracking-widest text-muted-foreground">{open.alt}</p>}
+          {open && (
+            <div className="flex items-center justify-between gap-2 px-1 pb-1">
+              <button
+                onClick={() => step(-1)}
+                aria-label="Previous photo"
+                className="flex items-center gap-1 border border-border px-3 py-1.5 font-mono text-[10px] uppercase tracking-widest text-muted-foreground transition-colors hover:border-primary hover:text-primary"
+              >
+                <ChevronLeft className="size-3.5" /> Prev
+              </button>
+              <p className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
+                {open.alt} · {openIndex! + 1}/{items.length}
+              </p>
+              <button
+                onClick={() => step(1)}
+                aria-label="Next photo"
+                className="flex items-center gap-1 border border-border px-3 py-1.5 font-mono text-[10px] uppercase tracking-widest text-muted-foreground transition-colors hover:border-primary hover:text-primary"
+              >
+                Next <ChevronRight className="size-3.5" />
+              </button>
+            </div>
+          )}
         </DialogContent>
       </Dialog>
 
