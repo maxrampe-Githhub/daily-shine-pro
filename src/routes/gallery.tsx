@@ -92,8 +92,8 @@ function GalleryPage() {
           </div>
 
           <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {items.map((item) => (
-              <figure key={item.src + item.alt} onClick={() => setOpen(item)} role="button" tabIndex={0} aria-label={`Enlarge ${item.alt}`} onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") setOpen(item); }} className="group relative cursor-zoom-in overflow-hidden border border-border bg-card">
+            {items.map((item, idx) => (
+              <figure key={item.src + item.alt} onClick={() => setOpenIndex(idx)} role="button" tabIndex={0} aria-label={`Enlarge ${item.alt}`} onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") setOpenIndex(idx); }} className="group relative cursor-zoom-in overflow-hidden border border-border bg-card">
                 <img src={item.src} alt={item.alt} loading="lazy" className="aspect-[4/3] h-full w-full object-cover transition duration-700 group-hover:scale-105" />
                 <figcaption className="absolute bottom-3 left-3 bg-background/90 px-3 py-1.5 font-mono text-[9px] uppercase tracking-widest">
                   {item.category}
