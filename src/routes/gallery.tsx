@@ -111,11 +111,31 @@ function GalleryPage() {
         </div>
       </section>
 
-      <Dialog open={!!open} onOpenChange={(o) => !o && setOpen(null)}>
+      <Dialog open={!!open} onOpenChange={(o) => !o && setOpenIndex(null)}>
         <DialogContent className="max-w-5xl border-border bg-background p-2 sm:p-3">
           <DialogTitle className="sr-only">{open?.alt}</DialogTitle>
           {open && <img src={open.src} alt={open.alt} className="max-h-[85vh] w-full object-contain" />}
-          {open && <p className="px-1 pb-1 font-mono text-[10px] uppercase tracking-widest text-muted-foreground">{open.alt}</p>}
+          {open && (
+            <div className="flex items-center justify-between gap-2 px-1 pb-1">
+              <button
+                onClick={() => step(-1)}
+                aria-label="Previous photo"
+                className="flex items-center gap-1 border border-border px-3 py-1.5 font-mono text-[10px] uppercase tracking-widest text-muted-foreground transition-colors hover:border-primary hover:text-primary"
+              >
+                <ChevronLeft className="size-3.5" /> Prev
+              </button>
+              <p className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
+                {open.alt} · {openIndex! + 1}/{items.length}
+              </p>
+              <button
+                onClick={() => step(1)}
+                aria-label="Next photo"
+                className="flex items-center gap-1 border border-border px-3 py-1.5 font-mono text-[10px] uppercase tracking-widest text-muted-foreground transition-colors hover:border-primary hover:text-primary"
+              >
+                Next <ChevronRight className="size-3.5" />
+              </button>
+            </div>
+          )}
         </DialogContent>
       </Dialog>
 
